@@ -4,9 +4,10 @@ import { TaskHeader } from './TaskHeader';
 import { EmptyTaskList } from './EmptyTaskList';
 import { Task } from '../../types/task';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Filter, SortAsc, CheckCircle } from 'lucide-react';
+import { Filter, SortAsc, CheckCircle, Sparkles, Loader2 } from 'lucide-react';
 import { Dropdown } from '../ui/Dropdown';
 import { Briefcase, Heart, Home, Star, AlertCircle } from 'lucide-react';
+import { generateTaskSuggestions } from '../../utils/ai';
 
 interface TaskListProps {
   tasks: Task[];
@@ -58,6 +59,7 @@ const TaskList: React.FC<TaskListProps> = ({
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedPriority, setSelectedPriority] = useState('');
   const [sortDirection, setSortDirection] = useState<SortDirection>('asc');
+  const [isGeneratingSuggestions, setIsGeneratingSuggestions] = useState(false);
 
   const filteredTasks = useMemo(() => {
     return tasks.filter(task => {
@@ -80,10 +82,62 @@ const TaskList: React.FC<TaskListProps> = ({
     setSortDirection(prev => prev === 'asc' ? 'desc' : 'asc');
   };
 
+  const handleGenerateSuggestions = async () => {
+    setIsGeneratingSuggestions(true);
+    try {
+      // Create context from existing tasks and user's productivity patterns
+      const context = `Current tasks: ${tasks.map(t => t.title).join(', ')}. 
+        Completed tasks: ${tasks.filter(t => t.completed).length}. 
+        Pending tasks: ${tasks.filter(t => !t.completed).length}.
+        Most common task categories: ${Array.from(new Set(tasks.map(t => t.category))).join(', ')}.`;
+
+      const suggestions = await generateTaskSuggestions(context);
+      
+      // Add suggested tasks with AI badge
+      suggestions.forEach(suggestion => {
+        const newTask: Task = {
+          id: Math.random().toString(36).substr(2, 9),
+          title: suggestion,
+          completed: false,
+          createdAt: new Date(),
+          category: 'AI Suggested',
+          priority: 'medium',
+          energyLevel: 'medium',
+        };
+        setTasks(prev => [...prev, newTask]);
+      });
+    } catch (error) {
+      console.error('Error generating task suggestions:', error);
+    } finally {
+      setIsGeneratingSuggestions(false);
+    }
+  };
+
   return (
     <div className="space-y-4 md:space-y-6">
       <TaskHeader onAddTask={onAddTask} />
       
+      {/* AI Suggestions Button */}
+      <motion.button
+        onClick={handleGenerateSuggestions}
+        disabled={isGeneratingSuggestions}
+        className="w-full flex items-center justify-center space-x-2 p-3 bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 rounded-xl hover:bg-purple-100 dark:hover:bg-purple-900/30 transition-colors"
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
+      >
+        {isGeneratingSuggestions ? (
+          <>
+            <Loader2 className="w-5 h-5 animate-spin" />
+            <span>Generating suggestions...</span>
+          </>
+        ) : (
+          <>
+            <Sparkles className="w-5 h-5" />
+            <span>Get AI Task Suggestions</span>
+          </>
+        )}
+      </motion.button>
+
       {/* Task Stats */}
       <div className="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-4">
         <motion.div 

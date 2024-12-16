@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Settings, Layout, Brain, Battery, BarChart2, Menu, Crown, X, Award, Calendar, Target, BookOpen, LineChart, MessageCircle, Users, Shield, Gift, Download, Palette } from 'lucide-react';
+import { Settings, Layout, Brain, Battery, BarChart2, Menu, Crown, X, Award, Calendar, Target, BookOpen, LineChart, MessageCircle, Users, Shield, Gift, Download, Palette, Bot } from 'lucide-react';
 import Logo from './Logo';
 import { ThemeToggle } from './ThemeToggle';
 import { UserProfile } from './UserProfile';
@@ -13,6 +13,8 @@ import FocusMode from './focus/FocusMode';
 import { TaskModal } from './tasks/TaskModal';
 import { v4 as uuidv4 } from 'uuid';
 import { motion, AnimatePresence } from 'framer-motion';
+import { AIChat } from './ai/AIChat';
+import { AI_CONFIG } from '../config/ai';
 
 interface DashboardProps {
   showPremiumPreview?: boolean;
@@ -20,7 +22,7 @@ interface DashboardProps {
   onShowPremium?: () => void;
 }
 
-type TabType = 'tasks' | 'energy' | 'insights' | 'focus';
+type TabType = 'tasks' | 'energy' | 'insights' | 'focus' | 'ai-chat';
 
 interface TabDefinition {
   id: TabType;
@@ -140,6 +142,12 @@ const Dashboard: React.FC<DashboardProps> = ({
       icon: <BarChart2 className="w-5 h-5" />,
       description: 'View your productivity analytics'
     },
+    {
+      id: 'ai-chat',
+      label: 'AI Chat',
+      icon: <Bot className="w-5 h-5" />,
+      description: 'Get ADHD support and advice'
+    },
   ];
 
   const handleTabChange = (tabId: TabType) => {
@@ -254,6 +262,7 @@ const Dashboard: React.FC<DashboardProps> = ({
             {activeTab === 'energy' && <EnergyTracker />}
             {activeTab === 'insights' && <Insights />}
             {activeTab === 'focus' && <FocusMode />}
+            {activeTab === 'ai-chat' && <AIChat apiKey={AI_CONFIG.HUGGINGFACE_API_KEY} />}
           </motion.div>
         </motion.main>
 
