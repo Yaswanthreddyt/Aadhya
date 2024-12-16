@@ -1,0 +1,50 @@
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-[#FBFBFD] dark:bg-black;
+  }
+
+  /* Add smooth scrolling */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Improve button tap targets on mobile */
+  button {
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+/* Add custom scrollbar */
+@layer utilities {
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+  }
+
+  .dark .scrollbar-thin {
+    scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+  }
+
+  .dark .scrollbar-thin::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+}
