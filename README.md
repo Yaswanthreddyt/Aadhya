@@ -1,4 +1,4 @@
-# ADHD Task Management Application
+# Aadhya - ADHD Task Management Application
 
 A modern, user-friendly task management application specifically designed for individuals with ADHD. Built with React, TypeScript, and Tailwind CSS.
 
@@ -34,15 +34,13 @@ A modern, user-friendly task management application specifically designed for in
 
 1. Clone the repository
 ```bash
-git clone https://github.com/your-username/your-repo-name.git
-cd your-repo-name
+git clone https://github.com/Yaswanthreddyt/Aadhya.git
+cd Aadhya
 ```
 
 2. Install dependencies
 ```bash
 npm install
-# or
-yarn install
 ```
 
 3. Create a `.env` file in the root directory and add your environment variables
@@ -58,15 +56,11 @@ VITE_FIREBASE_APP_ID=your_app_id
 4. Start the development server
 ```bash
 npm run dev
-# or
-yarn dev
 ```
 
 5. Build for production
 ```bash
 npm run build
-# or
-yarn build
 ```
 
 ## Deployment
